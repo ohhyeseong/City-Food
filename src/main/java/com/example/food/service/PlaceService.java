@@ -8,14 +8,18 @@ import com.example.food.domain.Region;
 import com.example.food.dto.PlaceRequest;
 import com.example.food.dto.PlaceResponse;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 public class PlaceService {
+    private static final Logger log = LoggerFactory.getLogger(PlaceService.class);
     private final PlaceRepository placeRepository;
     private final RegionRepository regionRepository;
+
 
     public PlaceService(PlaceRepository placeRepository, RegionRepository regionRepository) {
         this.placeRepository = placeRepository;
@@ -24,6 +28,7 @@ public class PlaceService {
     // 생성
     @Transactional
     public PlaceResponse create(PlaceRequest req) {
+        log.info("PlaceService.create() called, regionSlug={}", req.getRegionSlug());
         Region region = regionRepository.findBySlug(req.getRegionSlug()).orElseThrow(() -> new EntityNotFoundException("Region not found: " + req.getRegionSlug()));
         Place saved = placeRepository.save(Place.of(region, req.getName(), req.getCategory(), req.getAddress(), req.getPhone(), req.getDescription()));
         return PlaceResponse.from(saved);
