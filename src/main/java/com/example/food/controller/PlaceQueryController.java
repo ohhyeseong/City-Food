@@ -2,8 +2,8 @@ package com.example.food.controller;
 
 import com.example.food.dto.PlaceResponse;
 import com.example.food.service.PlaceQueryService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page; // Page 인터페이스
+import org.springframework.data.domain.Pageable; // Pageable 인터페이스
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,15 +35,11 @@ public class PlaceQueryController {
             @RequestParam(required = false) Long regionId, // 선택적 파라미터: 지역 필터 (없을 수도 있음)
             @RequestParam(required = false) String keyword, // 선택적 파라미터: 검색을 위한 키워드
             @RequestParam(required = false) String category, // 선택적 파라미터: 카테고리 필터
-            @RequestParam(defaultValue = "0") int page, // 페이징: 시작 페이지 번호 (기본값 0)
-            @RequestParam(defaultValue = "10") int size // 페이징: 페이지당 아이템 수 (기본값 10)
+            Pageable pageable // Spring Data가 자동으로 page, size, sort 파라미터를 바인딩
     ) {
-        // PageRequest를 사용해 페이지 네이션 정보를 생성
         // PlaceQueryService의 search 메서드에 필터, 검색, 페이지네이션 정보를 전달하여 경과 반환
         return ResponseEntity.ok(
-                placeQueryService.search(regionId,keyword,category, PageRequest.of(page,size))
+                placeQueryService.search(regionId, keyword, category, pageable)
         );
     }
 }
-
-

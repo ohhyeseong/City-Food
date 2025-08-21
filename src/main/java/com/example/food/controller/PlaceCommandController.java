@@ -2,20 +2,27 @@ package com.example.food.controller;
 
 import com.example.food.dto.PlaceRequest; // Place 요청 데이터 전송 객체
 import com.example.food.dto.PlaceResponse; // Place 응답 데이터 전송 객체
+import com.example.food.service.PlaceQueryService;
 import com.example.food.service.PlaceService; // 데이터 조작(생성, 수정, 삭제) 로직을 담당하는 서비스
 import jakarta.validation.Valid; // 유효성 검사 어노테이션
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity; // HTTP 응답 빙더 객체
 import org.springframework.web.bind.annotation.*; // REST API 관련 어노테이션 제공
+
+import java.util.List;
 
 @RestController // 이 클래스가 RESTful API 컨트롤러임을 명시
 @RequestMapping("/api/places") // "/api/places"로 시작하는 요청 매핑
 public class PlaceCommandController {
 
     private final PlaceService placeService; // 쓰기 작업을 처리하기 위한 서비스
+    private final PlaceQueryService placeQueryService; // 읽기 작업을 처리하기 위한 서비스
 
     // 생성자 주입을 통한 PlaceService 의존성 주입
-    public PlaceCommandController(PlaceService placeService) {
+    public PlaceCommandController(PlaceService placeService, PlaceQueryService placeQueryService) {
         this.placeService = placeService;
+        this.placeQueryService = placeQueryService;
     }
 
     // 생성: POST /api/places

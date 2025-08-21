@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class PlaceService {
@@ -25,6 +27,27 @@ public class PlaceService {
         this.placeRepository = placeRepository;
         this.regionRepository = regionRepository;
     }
+
+    // 조회 (검색)
+    public List<PlaceResponse> search(String keyword, Long regionId) {
+        boolean hasKeyword = keyword != null && !keyword.isBlank();
+        boolean hasRegion = regionId != null;
+
+        List<Place> places;
+
+        if (hasKeyword && hasRegion) {
+            places = placeRepository.findByNameContainingAndRegionId(keyword, regionId);
+        } else if (hasKeyword) {
+            places = placeRepository.findByNameContaining(keyword);
+        } else if (hasRegion) {
+            places = placeRepository.findByRegionId(regionId);
+        } else {
+            places = placeRepository.findAll();
+        }
+
+        return places.stream().map(PlaceResponse::from).toList();
+    }
+
     // 생성
     @Transactional
     public PlaceResponse create(PlaceRequest req) {
