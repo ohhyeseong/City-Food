@@ -39,8 +39,8 @@ CityFood는 Spring Boot와 JPA를 기반으로 개발된 웹 애플리케이션�
 ### 2. 프로젝트 클론
 
 ```bash
-git clone https://github.com/your-username/CityFood.git
-cd CityFood
+git clone https://github.com/ohhyeseong/City-Food.git
+cd City-Food
 ```
 
 ### 3. 데이터베이스 설정
