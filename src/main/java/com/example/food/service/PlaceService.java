@@ -1,8 +1,8 @@
 package com.example.food.service;
 
 
-import com.example.food.Repository.PlaceRepository;
-import com.example.food.Repository.RegionRepository;
+import com.example.food.repository.PlaceRepository;
+import com.example.food.repository.RegionRepository;
 import com.example.food.domain.Place;
 import com.example.food.domain.Region;
 import com.example.food.dto.PlaceRequest;

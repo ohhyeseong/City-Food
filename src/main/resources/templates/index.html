@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -164,7 +164,7 @@
   <!-- 맛집 등록 폼 시작 -->
   <section class="card">
     <h2>맛집 등록</h2>
-    <form>
+    <form id="createForm">
       <!-- 이름 입력 -->
       <label for="name">이름</label>
       <input type="text" id="name" name="name" placeholder="맛집 이름 입력">
@@ -188,9 +188,9 @@
       <!-- 지역 슬러그 선택 -->
       <label for="regionSlug">지역 슬러그</label>
       <select id="regionSlug" name="regionSlug">
-        <option value="">선택하세요</option>
-        <option value="seoul">seoul</option>
-        <option value="busan">busan</option>
+        <option value="" selected>선택하세요</option>
+        <!--/* Thymeleaf로 regions 리스트를 순회하며 option 태그 생성 */-->
+        <option th:each="region : ${regions}" th:value="${region.slug}" th:text="${region.name}"></option>
       </select>
 
       <!-- 등록 및 초기화 버튼 -->
@@ -208,9 +208,9 @@
     <div style="display:flex; gap:8px; margin-bottom:8px;">
       <input id="keyword" placeholder="키워드(이름)">
       <select id="regionId">
-        <option value="">지역 전체</option>
-        <option value="1">서울(id=1)</option>
-        <option value="2">부산(id=2)</option>
+        <option value="" selected>지역 전체</option>
+        <!--/* Thymeleaf로 regions 리스트를 순회하며 option 태그 생성 */-->
+        <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.name}"></option>
       </select>
       <button id="searchBtn" type="button">검색</button>
     </div>
@@ -226,5 +226,40 @@
   © CityFood
 </footer>
 <!-- 푸터 섹션 끝 -->
+
+<script>
+  // 맛집 등록 폼 제출 스크립트
+  const createForm = document.getElementById('createForm');
+
+  createForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // 폼의 기본 제출 동작(페이지 이동)을 막습니다.
+
+    const formData = new FormData(createForm);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      // '/api/places' 주소로 JSON 데이터를 POST 방식으로 보냅니다.
+      const response = await fetch('/api/places', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert('맛집이 성공적으로 등록되었습니다!');
+        createForm.reset(); // 성공 시 폼의 내용을 초기화합니다.
+        // TODO: 등록 성공 후 맛집 목록을 새로고침하는 로직 추가
+      } else {
+        const errorData = await response.json();
+        alert('등록에 실패했습니다: ' + (errorData.message || '서버 오류가 발생했습니다.'));
+      }
+    } catch (error) {
+      console.error('맛집 등록 중 오류 발생:', error);
+      alert('요청 중 오류가 발생했습니다. 콘솔을 확인해주세요.');
+    }
+  });
+</script>
 </body>
 </html>

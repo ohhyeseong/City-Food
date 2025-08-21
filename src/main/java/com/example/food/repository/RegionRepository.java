@@ -1,4 +1,4 @@
-package com.example.food.Repository;
+package com.example.food.repository;
 
 import com.example.food.domain.Region;
 import org.springframework.data.jpa.repository.JpaRepository;

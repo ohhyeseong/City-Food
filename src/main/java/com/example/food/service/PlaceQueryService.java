@@ -1,6 +1,6 @@
 package com.example.food.service;
 
-import com.example.food.Repository.PlaceRepository;
+import com.example.food.repository.PlaceRepository;
 import com.example.food.domain.Place;
 import com.example.food.dto.PlaceResponse;
 import jakarta.persistence.EntityNotFoundException;

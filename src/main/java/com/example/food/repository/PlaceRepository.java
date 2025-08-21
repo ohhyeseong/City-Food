@@ -1,4 +1,4 @@
-package com.example.food.Repository;
+package com.example.food.repository;
 
 import com.example.food.domain.Place;
 import org.springframework.data.domain.Page;
